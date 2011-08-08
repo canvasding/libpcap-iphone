@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#  Automatic build script for gnutls
+#  Automatic build script for libpcap
 #  for iPhoneOS and iPhoneSimulator
 #
-#  Created by Felix Schulze on 30.01.11.
+#  Created by Felix Schulze on 30.01.11. <-- "Original Owner"
 #  Copyright 2010 Felix Schulze. All rights reserved.
 #
 #  pcap build modifications
