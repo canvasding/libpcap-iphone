@@ -97,9 +97,6 @@ echo "Build library..."
 lipo -create ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/lib/libpcap.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libpcap.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libpcap.a -output ${CURRENTPATH}/lib/libpcap.a
 
 echo "Copying Headers..."
-cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/pcap ${CURRENTPATH}/include/
-cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/pcap-bpf.h ${CURRENTPATH}/include/
-cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/pcap-namedb.h ${CURRENTPATH}/include/
-cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/pcap.h ${CURRENTPATH}/include/
+cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/ ${CURRENTPATH}/include/
 
 echo "Building done."
