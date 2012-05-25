@@ -1,0 +1,6 @@
+Just run:
+- git clone git@github.com:D4rkM4t3r/libpcap-iphone.git
+- cd libpcap-iphone
+- bash ./build-libpcap.sh
+
+*Let the script do the rest
