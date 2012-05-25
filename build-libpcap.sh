@@ -8,7 +8,7 @@
 #
 #  pcap build modifications
 #  Created by Jarrod Ariyasu on 08/07/2011
-#  Copyright 2011 Jarrod Ariyasu. All rights reserved.
+#  Copyright 2011-2012 Jarrod Ariyasu. All rights reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@
 ###########################################################################
 #  Change values here
 #
-VERSION="1.1.1"
-SDKVERSION="4.3"
+VERSION="1.2.1"
+SDKVERSION="5.1"
 FILE="libpcap-${VERSION}.tar.gz"
 #
 ###########################################################################
@@ -34,9 +34,9 @@ FILE="libpcap-${VERSION}.tar.gz"
 # Don't change anything here
 CURRENTPATH=`pwd`
 ARCHS="i386 armv6 armv7"
-
-
+DEVELOPER=`xcode-select -print-path`
 ##########
+
 set -e
 if [ ! -e ${FILE} ]; then
 	echo "Downloading ${FILE}"
@@ -45,9 +45,9 @@ else
 	echo "Using ${FILE}"
 fi
 
-mkdir -p bin
-mkdir -p lib
-mkdir -p src
+mkdir -p "${CURRENTPATH}/bin"
+mkdir -p "${CURRENTPATH}/lib"
+mkdir -p "${CURRENTPATH}/src"
 
 for ARCH in ${ARCHS}
 do
@@ -65,16 +65,16 @@ do
 
 	echo "Please stand by..."
 
-	export DEVROOT="/Developer/Platforms/${PLATFORM}.platform/Developer"
+	export DEVROOT="${DEVELOPER}/Platforms/${PLATFORM}.platform/Developer"
 	export SDKROOT="${DEVROOT}/SDKs/${PLATFORM}${SDKVERSION}.sdk"
 	export CC=${DEVROOT}/usr/bin/gcc
 	export LD=${DEVROOT}/usr/bin/ld
-	export CPP=${DEVROOT}/usr/bin/cpp
+	export CPP=${DEVROOT}/usr/bin/llvm-cpp-4.2
 	export CXX=${DEVROOT}/usr/bin/g++
 	export AR=${DEVROOT}/usr/bin/ar
 	export AS=${DEVROOT}/usr/bin/as
 	export NM=${DEVROOT}/usr/bin/nm
-	export CXXCPP=$DEVROOT/usr/bin/cpp
+	export CXXCPP=$DEVROOT/usr/bin/llvm-cpp-4.2
 	export RANLIB=$DEVROOT/usr/bin/ranlib
 	export LDFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT} -L${CURRENTPATH}/lib"
 	export CFLAGS="-arch ${ARCH} -pipe -no-cpp-precomp -isysroot ${SDKROOT} -I${CURRENTPATH}/include"
