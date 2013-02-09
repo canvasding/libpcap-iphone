@@ -8,7 +8,7 @@
 #
 #  pcap build modifications
 #  Created by Jarrod Ariyasu on 08/07/2011
-#  Copyright 2011-2012 Jarrod Ariyasu. All rights reserved.
+#  Copyright 2011-2013 Jarrod Ariyasu. All rights reserved.
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -25,22 +25,22 @@
 ###########################################################################
 #  Change values here
 #
-VERSION="1.2.1"
-SDKVERSION="5.1"
+VERSION="1.3.0"
+SDKVERSION="6.1"
 FILE="libpcap-${VERSION}.tar.gz"
 #
 ###########################################################################
 #
 # Don't change anything here
 CURRENTPATH=`pwd`
-ARCHS="i386 armv6 armv7"
+ARCHS="i386 armv7"
 DEVELOPER=`xcode-select -print-path`
 ##########
 
 set -e
 if [ ! -e ${FILE} ]; then
 	echo "Downloading ${FILE}"
-    curl -O http://www.tcpdump.org/release/${FILE}
+    	curl -O http://www.tcpdump.org/release/${FILE}
 else
 	echo "Using ${FILE}"
 fi
@@ -48,6 +48,7 @@ fi
 mkdir -p "${CURRENTPATH}/bin"
 mkdir -p "${CURRENTPATH}/lib"
 mkdir -p "${CURRENTPATH}/src"
+mkdir -p "${CURRENTPATH}/include"
 
 for ARCH in ${ARCHS}
 do
@@ -84,17 +85,20 @@ do
 
 	LOG="${CURRENTPATH}/bin/${PLATFORM}${SDKVERSION}-${ARCH}.sdk/build-libpcap-${VERSION}.log"
 
-	./configure --host=${ARCH}-apple-darwin --prefix="${CURRENTPATH}/bin/${PLATFORM}${SDKVERSION}-${ARCH}.sdk" --enable-shared=no --with-pcap=null --enable-ipv6 >> "${LOG}" 2>&1
+    	cp -rf /usr/include/net ${CURRENTPATH}/include
+
+	./configure --host=${ARCH}-apple-darwin --prefix="${CURRENTPATH}/bin/${PLATFORM}${SDKVERSION}-${ARCH}.sdk" --enable-shared=no --with-pcap=bpf --enable-ipv6 >> "${LOG}" 2>&1
 
 	make >> "${LOG}" 2>&1
 	make install >> "${LOG}" 2>&1
 	cd ${CURRENTPATH}
+       rm -rf include/net
 	rm -rf src/libpcap-${VERSION}
 	
 done
 
 echo "Build library..."
-lipo -create ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/lib/libpcap.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv6.sdk/lib/libpcap.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libpcap.a -output ${CURRENTPATH}/lib/libpcap.a
+lipo -create ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/lib/libpcap.a ${CURRENTPATH}/bin/iPhoneOS${SDKVERSION}-armv7.sdk/lib/libpcap.a -output ${CURRENTPATH}/lib/libpcap.a
 
 echo "Copying Headers..."
 cp -R ${CURRENTPATH}/bin/iPhoneSimulator${SDKVERSION}-i386.sdk/include/ ${CURRENTPATH}/include/
